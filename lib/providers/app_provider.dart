@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../models/farmer.dart';
 import '../models/agent.dart';
 import '../models/transporter.dart';
+import '../models/qat_type.dart';
 import '../services/supabase_service.dart';
 
 class AppProvider with ChangeNotifier {
@@ -9,6 +10,7 @@ class AppProvider with ChangeNotifier {
   List<Farmer> farmers = [];
   List<Agent> agents = [];
   List<Transporter> transporters = [];
+  List<QatType> qatTypes = [];
   bool isLoading = false;
 
   Future<void> loadInitialData() async {
@@ -16,6 +18,16 @@ class AppProvider with ChangeNotifier {
     farmers = await _api.getFarmers();
     agents = await _api.getAgents();
     transporters = await _api.getTransporters();
+    qatTypes = await _api.getQatTypes();
+
+    // Fallback mock data if DB is empty/unconnected
+    if (qatTypes.isEmpty) {
+      qatTypes = [
+        QatType(id: '1', name: 'بقمة', commissionAmount: 100, commissionPer: 'piece'),
+        QatType(id: '2', name: 'قطل', commissionAmount: 150, commissionPer: 'pair'),
+      ];
+    }
+
     isLoading = false; notifyListeners();
   }
 
@@ -38,5 +50,12 @@ class AppProvider with ChangeNotifier {
     final result = await _api.addTransporter(newTransporter);
     if (result != null) { transporters.add(result); notifyListeners(); }
     else { transporters.add(newTransporter); notifyListeners(); } // Mock fallback
+  }
+
+  Future<void> addQatType(String name, double commissionAmount, String commissionPer) async {
+    final newQatType = QatType(name: name, commissionAmount: commissionAmount, commissionPer: commissionPer);
+    final result = await _api.addQatType(newQatType);
+    if (result != null) { qatTypes.add(result); notifyListeners(); }
+    else { qatTypes.add(QatType(id: DateTime.now().toString(), name: name, commissionAmount: commissionAmount, commissionPer: commissionPer)); notifyListeners(); } // Mock fallback
   }
 }

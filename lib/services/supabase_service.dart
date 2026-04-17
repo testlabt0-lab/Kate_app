@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/farmer.dart';
 import '../models/agent.dart';
 import '../models/transporter.dart';
+import '../models/qat_type.dart';
 
 class SupabaseService {
   final _client = Supabase.instance.client;
@@ -45,6 +46,20 @@ class SupabaseService {
     try {
       final response = await _client.from('transporters').insert(transporter.toJson()).select().single();
       return Transporter.fromJson(response);
+    } catch (e) { return null; }
+  }
+
+  Future<List<QatType>> getQatTypes() async {
+    try {
+      final response = await _client.from('qat_types').select().order('name');
+      return (response as List).map((e) => QatType.fromJson(e)).toList();
+    } catch (e) { return []; }
+  }
+
+  Future<QatType?> addQatType(QatType qatType) async {
+    try {
+      final response = await _client.from('qat_types').insert(qatType.toJson()).select().single();
+      return QatType.fromJson(response);
     } catch (e) { return null; }
   }
 }
