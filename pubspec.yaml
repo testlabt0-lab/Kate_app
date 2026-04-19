@@ -39,6 +39,8 @@ dependencies:
   google_fonts: ^8.0.2
   shared_preferences: ^2.5.5
   url_launcher: ^6.3.2
+  dropdown_search: ^7.0.0
+  flutter_typeahead: ^6.0.0
 
 dev_dependencies:
   flutter_test:
