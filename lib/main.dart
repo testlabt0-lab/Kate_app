@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qat_shaddad_app/providers/app_provider.dart';
-import 'package:qat_shaddad_app/screens/home_screen.dart';
+import 'package:qat_app/providers/app_provider.dart';
+import 'package:qat_app/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
