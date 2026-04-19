@@ -28,11 +28,12 @@ class ShipmentItem {
   final String shipmentId;
   final String farmerId;
   final String agentId;
-  final String qatTypeId; // Reference to QatType from database
-  final String qatTypeName; // For easy UI display without full join
-  final int quantity; // Number of pieces (Habbat)
-  final int boxesCount; // عدد العدل
+  final String qatTypeId;
+  final String qatTypeName;
+  final int quantity;
+  final int boxesCount;
   final double? expectedPrice;
+  final String status; // 'pending', 'delivered', 'lost'
 
   Farmer? farmer;
   Agent? agent;
@@ -47,6 +48,7 @@ class ShipmentItem {
     required this.quantity,
     required this.boxesCount,
     this.expectedPrice,
+    this.status = 'pending',
     this.farmer,
     this.agent
   });
@@ -61,6 +63,7 @@ class ShipmentItem {
       quantity: json['quantity'] ?? 0,
       boxesCount: json['boxes_count'] ?? 1,
       expectedPrice: (json['expected_price'] as num?)?.toDouble(),
+      status: json['status'] ?? 'pending',
       farmer: json['farmers'] != null ? Farmer.fromJson(json['farmers']) : null,
       agent: json['agents'] != null ? Agent.fromJson(json['agents']) : null);
 
@@ -73,6 +76,7 @@ class ShipmentItem {
     'qat_type_name': qatTypeName,
     'quantity': quantity,
     'boxes_count': boxesCount,
-    if (expectedPrice != null) 'expected_price': expectedPrice
+    if (expectedPrice != null) 'expected_price': expectedPrice,
+    'status': status
   };
 }

@@ -7,6 +7,7 @@ import 'rawakib_screen.dart';
 import 'farmer_orders_screen.dart';
 import 'settlements_screen.dart';
 import 'qat_types_screen.dart';
+import 'lost_items_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,21 +25,22 @@ class HomeScreen extends StatelessWidget {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
         children: [
-          _buildMenuCard(context, 'المزارعين', Icons.people, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FarmersScreen()))),
+          _buildMenuCard(context, 'المزارعين والتقارير', Icons.people, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FarmersScreen()))),
           _buildMenuCard(context, 'الوكلاء', Icons.store, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AgentsScreen()))),
           _buildMenuCard(context, 'أنواع القات', Icons.category, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QatTypesScreen()))),
           _buildMenuCard(context, 'الشحنات (الرحلات)', Icons.assignment, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ShipmentsScreen()))),
-          _buildMenuCard(context, 'الناقلين', Icons.local_shipping, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TransportersScreen()))),
+          _buildMenuCard(context, 'تتبع الضياع', Icons.warning, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LostItemsScreen())), color: Colors.red.shade100),
           _buildMenuCard(context, 'الرواكب', Icons.inventory, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RawakibScreen()))),
           _buildMenuCard(context, 'الطلبات والمقاضي', Icons.shopping_basket, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FarmerOrdersScreen()))),
-          _buildMenuCard(context, 'التصفيات', Icons.attach_money, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettlementsScreen()))),
+          _buildMenuCard(context, 'التصفيات المالية', Icons.attach_money, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettlementsScreen()))),
         ],
       ),
     );
   }
 
-  Widget _buildMenuCard(BuildContext context, String title, IconData icon, VoidCallback onTap) {
+  Widget _buildMenuCard(BuildContext context, String title, IconData icon, VoidCallback onTap, {Color? color}) {
     return Card(
+      color: color,
       elevation: 2,
       child: InkWell(
         onTap: onTap,

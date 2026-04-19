@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import 'farmer_report_screen.dart';
 
 class FarmersScreen extends StatelessWidget {
   const FarmersScreen({super.key});
@@ -8,7 +9,7 @@ class FarmersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('إدارة المزارعين')),
+      appBar: AppBar(title: const Text('إدارة المزارعين والتقارير')),
       body: Consumer<AppProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) return const Center(child: CircularProgressIndicator());
@@ -21,7 +22,15 @@ class FarmersScreen extends StatelessWidget {
                 leading: const CircleAvatar(child: Icon(Icons.person)),
                 title: Text(farmer.name),
                 subtitle: Text(farmer.phone ?? 'لا يوجد رقم'),
-                trailing: Text('${farmer.totalDebt} ريال', style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('${farmer.totalDebt} ريال', style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.analytics, color: Colors.blue),
+                  ],
+                ),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FarmerReportScreen(farmer: farmer))),
               );
             },
           );

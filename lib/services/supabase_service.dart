@@ -3,6 +3,7 @@ import '../models/farmer.dart';
 import '../models/agent.dart';
 import '../models/transporter.dart';
 import '../models/qat_type.dart';
+import '../models/payment.dart';
 
 class SupabaseService {
   final _client = Supabase.instance.client;
@@ -60,6 +61,13 @@ class SupabaseService {
     try {
       final response = await _client.from('qat_types').insert(qatType.toJson()).select().single();
       return QatType.fromJson(response);
+    } catch (e) { return null; }
+  }
+
+  Future<Payment?> addPayment(Payment payment) async {
+    try {
+      final response = await _client.from('payments').insert(payment.toJson()).select().single();
+      return Payment.fromJson(response);
     } catch (e) { return null; }
   }
 }
