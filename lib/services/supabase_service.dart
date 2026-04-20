@@ -4,6 +4,7 @@ import '../models/agent.dart';
 import '../models/transporter.dart';
 import '../models/qat_type.dart';
 import '../models/payment.dart';
+import '../models/daily_price.dart';
 
 class SupabaseService {
   final _client = Supabase.instance.client;
@@ -68,6 +69,16 @@ class SupabaseService {
     try {
       final response = await _client.from('payments').insert(payment.toJson()).select().single();
       return Payment.fromJson(response);
+    } catch (e) { return null; }
+  }
+
+  Future<DailyPrice?> addDailyPrice(DailyPrice dailyPrice) async {
+    try {
+      final response = await _client.from('daily_prices')
+          .upsert(dailyPrice.toJson(), onConflict: 'agent_id, qat_type_id, price_date')
+          .select()
+          .single();
+      return DailyPrice.fromJson(response);
     } catch (e) { return null; }
   }
 }

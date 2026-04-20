@@ -6,6 +6,7 @@ import 'farmer_orders_screen.dart';
 import 'settlements_screen.dart';
 import 'qat_types_screen.dart';
 import 'lost_items_screen.dart';
+import 'daily_prices_screen.dart';
 
 class MoreMenuScreen extends StatelessWidget {
   const MoreMenuScreen({super.key});
@@ -18,6 +19,7 @@ class MoreMenuScreen extends StatelessWidget {
         children: [
           _buildListTile(context, 'الوكلاء (العملاء)', Icons.store, const AgentsScreen()),
           _buildListTile(context, 'أنواع القات والعمولات', Icons.category, const QatTypesScreen()),
+          _buildListTile(context, 'الأسعار اليومية والرسائل SMS', Icons.monetization_on, const DailyPricesScreen(), iconColor: Colors.amber.shade700),
           _buildListTile(context, 'الناقلين', Icons.local_shipping, const TransportersScreen()),
           const Divider(),
           _buildListTile(context, 'تتبع الضياع (العدل المفقودة)', Icons.warning_amber_rounded, const LostItemsScreen(), iconColor: Colors.red),

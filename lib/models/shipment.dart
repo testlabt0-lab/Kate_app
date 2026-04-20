@@ -33,7 +33,9 @@ class ShipmentItem {
   final int quantity;
   final int boxesCount;
   final double? expectedPrice;
-  final String status; // 'pending', 'delivered', 'lost'
+  final double? actualSalePrice;
+  final double? totalAmount;
+  final String status;
 
   Farmer? farmer;
   Agent? agent;
@@ -48,6 +50,8 @@ class ShipmentItem {
     required this.quantity,
     required this.boxesCount,
     this.expectedPrice,
+    this.actualSalePrice,
+    this.totalAmount,
     this.status = 'pending',
     this.farmer,
     this.agent
@@ -63,6 +67,8 @@ class ShipmentItem {
       quantity: json['quantity'] ?? 0,
       boxesCount: json['boxes_count'] ?? 1,
       expectedPrice: (json['expected_price'] as num?)?.toDouble(),
+      actualSalePrice: (json['actual_sale_price'] as num?)?.toDouble(),
+      totalAmount: (json['total_amount'] as num?)?.toDouble(),
       status: json['status'] ?? 'pending',
       farmer: json['farmers'] != null ? Farmer.fromJson(json['farmers']) : null,
       agent: json['agents'] != null ? Agent.fromJson(json['agents']) : null);
@@ -77,6 +83,8 @@ class ShipmentItem {
     'quantity': quantity,
     'boxes_count': boxesCount,
     if (expectedPrice != null) 'expected_price': expectedPrice,
+    if (actualSalePrice != null) 'actual_sale_price': actualSalePrice,
+    if (totalAmount != null) 'total_amount': totalAmount,
     'status': status
   };
 }

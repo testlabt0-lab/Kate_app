@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../models/agent.dart';
+import '../services/pdf_invoice_service.dart';
 
 class SettlementsScreen extends StatefulWidget {
   const SettlementsScreen({super.key});
@@ -39,7 +40,7 @@ class _SettlementsScreenState extends State<SettlementsScreen> {
                           const Text('تقرير التصفية المبدئي', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                           Text('الحوالة: ${amountController.text}'),
                           const Expanded(child: Center(child: Text('هنا تظهر مقاصة ديون المزارعين'))),
-                          ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text('اعتماد التصفية')),
+                          ElevatedButton(onPressed: () { Navigator.pop(context); PdfInvoiceService.generateAndPrintSettlementInvoice(agent: selectedAgent!, totalAmount: double.parse(amountController.text), transporterFee: 5000, agentCommission: 10000, shaddadCommission: 8000, farmersTotalNet: double.parse(amountController.text) - 23000); }, child: const Text('طباعة الفاتورة (PDF) واعتماد')),
                         ],
                       ),
                     ),
