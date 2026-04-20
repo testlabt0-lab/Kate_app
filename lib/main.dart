@@ -3,12 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qat_app/providers/app_provider.dart';
-import 'package:qat_app/screens/home_screen.dart';
+import 'package:qat_app/screens/main_navigation_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Connect to the REAL Supabase project
   await Supabase.initialize(
     url: 'https://fdldafytesdcdcsmgrnd.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkbGRhZnl0ZXNkY2Rjc21ncm5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjA5MTAsImV4cCI6MjA5MjA5NjkxMH0.PKuXf7b-bEFgv9nDbMa5xR-D3918QvHkztDzG-lP144',
@@ -49,7 +48,7 @@ class QatShaddadApp extends StatelessWidget {
           child: child!,
         );
       },
-      home: const HomeScreen(),
+      home: const MainNavigationScreen(),
     );
   }
 }
