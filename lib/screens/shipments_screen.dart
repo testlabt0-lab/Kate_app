@@ -1,38 +1,44 @@
 import 'package:flutter/material.dart';
-import '../models/shipment.dart';
+import 'package:provider/provider.dart';
+import '../providers/app_provider.dart';
 import 'shipment_details_screen.dart';
 
-class ShipmentsScreen extends StatefulWidget {
+class ShipmentsScreen extends StatelessWidget {
   const ShipmentsScreen({super.key});
-  @override
-  State<ShipmentsScreen> createState() => _ShipmentsScreenState();
-}
-
-class _ShipmentsScreenState extends State<ShipmentsScreen> {
-  final List<Shipment> _mockShipments = [Shipment(id: '1', tripDate: DateTime.now().subtract(const Duration(days: 1)), status: 'delivered')];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('إدارة الشحنات')),
-      body: ListView.builder(
-        itemCount: _mockShipments.length,
-        itemBuilder: (context, index) {
-          final shipment = _mockShipments[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: shipment.status == 'pending' ? Colors.blue.shade100 : Colors.green.shade100,
-                child: Icon(Icons.assignment, color: shipment.status == 'pending' ? Colors.blue : Colors.green),
-              ),
-              title: Text('رحلة يوم: ${shipment.tripDate.toIso8601String().split('T')[0]}'),
-              subtitle: Text('الحالة: ${shipment.status == 'pending' ? 'قيد التجهيز' : 'مكتملة ومُسلمة'}'),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ShipmentDetailsScreen(shipment: shipment))),
-            ),
+      body: Consumer<AppProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading && provider.shipments.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (provider.shipments.isEmpty) {
+             return const Center(child: Text('لا توجد شحنات (رحلات) حتى الآن.'));
+          }
+
+          return ListView.builder(
+            itemCount: provider.shipments.length,
+            itemBuilder: (context, index) {
+              final shipment = provider.shipments[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: shipment.status == 'pending' ? Colors.blue.shade100 : Colors.green.shade100,
+                    child: Icon(Icons.assignment, color: shipment.status == 'pending' ? Colors.blue : Colors.green),
+                  ),
+                  title: Text('رحلة يوم: ${shipment.tripDate.toIso8601String().split('T')[0]}'),
+                  subtitle: Text('الحالة: ${shipment.status == 'pending' ? 'قيد التجهيز' : 'مكتملة ومُسلمة'}'),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ShipmentDetailsScreen(shipment: shipment))),
+                ),
+              );
+            },
           );
-        },
+        }
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showNewTripOptions(context),
@@ -43,6 +49,7 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
   }
 
   void _showNewTripOptions(BuildContext context) {
+    final provider = context.read<AppProvider>();
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
@@ -55,18 +62,18 @@ class _ShipmentsScreenState extends State<ShipmentsScreen> {
               leading: const Icon(Icons.content_copy, color: Colors.blue),
               title: const Text('نسخ مزارعي الأمس (سريع)'),
               subtitle: const Text('إنشاء رحلة بنفس الأسماء والوكلاء لتعديل الأعداد فقط'),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                setState(() => _mockShipments.insert(0, Shipment(id: DateTime.now().millisecondsSinceEpoch.toString(), tripDate: DateTime.now(), status: 'pending')));
+                await provider.addShipment(DateTime.now());
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم إنشاء الرحلة ونسخ تفاصيل الأمس!')));
               },
             ),
             ListTile(
               leading: const Icon(Icons.add_circle_outline, color: Colors.green),
               title: const Text('رحلة جديدة فارغة'),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                setState(() => _mockShipments.insert(0, Shipment(id: DateTime.now().millisecondsSinceEpoch.toString(), tripDate: DateTime.now(), status: 'pending')));
+                await provider.addShipment(DateTime.now());
               },
             ),
           ],
