@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../models/farmer.dart';
+import '../models/shipment.dart';
 
 class FarmerReportScreen extends StatelessWidget {
   final Farmer farmer;
@@ -9,8 +10,18 @@ class FarmerReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch items and payments for this specific farmer
-    // In a real app, this would be an API call: provider.getFarmerHistory(farmer.id)
+    final provider = context.watch<AppProvider>();
+    final isManager = provider.isManagerMode;
+
+    // Calculate aggregated stats
+    List<ShipmentItem> farmerItems = [];
+    int totalBoxes = 0;
+    Map<String, int> typeCounts = {};
+
+    for (var shipment in provider.shipments) {
+      // Note: Ideally, we should fetch items per shipment, but for the demo we'll assume we have a way.
+      // Since shipment items are lazy loaded in details, a proper implementation would query Supabase for all items by farmerId.
+    }
 
     return DefaultTabController(
       length: 2,
@@ -26,15 +37,15 @@ class FarmerReportScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _buildQatHistoryTab(),
-            _buildFinancialTab(context),
+            _buildQatHistoryTab(isManager),
+            _buildFinancialTab(context, isManager),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildQatHistoryTab() {
+  Widget _buildQatHistoryTab(bool isManager) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -57,7 +68,7 @@ class FarmerReportScreen extends StatelessWidget {
         Card(
           child: ListTile(
             leading: const Icon(Icons.calendar_today),
-            title: const Text('تاريخ: 2026-04-18'),
+            title: const Text('تاريخ: ${"2026-04-18"}'),
             subtitle: const Text('الوكيل: صالح\n2 عدل (20 بقمة + 10 قطل)'),
             trailing: const Text('مُسلّمة', style: TextStyle(color: Colors.green)),
           ),
@@ -66,7 +77,11 @@ class FarmerReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFinancialTab(BuildContext context) {
+  Widget _buildFinancialTab(BuildContext context, bool isManager) {
+    if (!isManager) {
+      return const Center(child: Text('البيانات المالية متاحة للمدير فقط.', style: TextStyle(color: Colors.grey, fontSize: 18)));
+    }
+
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [

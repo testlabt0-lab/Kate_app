@@ -25,7 +25,8 @@ class HomeScreen extends StatelessWidget {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
         children: [
-          _buildMenuCard(context, 'المزارعين والتقارير', Icons.people, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FarmersScreen()))),
+          _buildMenuCard(context, 'المزارعين', Icons.people, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FarmersScreen()))),
+          _buildMenuCard(context, 'التقارير الشاملة', Icons.analytics, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsDashboardScreen()))),
           _buildMenuCard(context, 'الوكلاء', Icons.store, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AgentsScreen()))),
           _buildMenuCard(context, 'أنواع القات', Icons.category, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const QatTypesScreen()))),
           _buildMenuCard(context, 'الشحنات (الرحلات)', Icons.assignment, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ShipmentsScreen()))),
