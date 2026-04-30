@@ -34,6 +34,7 @@ class HomeScreen extends StatelessWidget {
           _buildMenuCard(context, 'الرواكب', Icons.inventory, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RawakibScreen()))),
           _buildMenuCard(context, 'الطلبات والمقاضي', Icons.shopping_basket, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FarmerOrdersScreen()))),
           _buildMenuCard(context, 'التصفيات المالية', Icons.attach_money, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettlementsScreen()))),
+          _buildMenuCard(context, 'جرد نهاية اليوم', Icons.fact_check, () => Navigator.push(context, MaterialPageRoute(builder: (_) => const EndOfDayScreen())), color: Colors.blue.shade100),
         ],
       ),
     );

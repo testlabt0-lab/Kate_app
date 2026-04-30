@@ -1,3 +1,4 @@
+import '../services/pdf_farmer_report_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
@@ -78,6 +79,38 @@ class FarmerReportScreen extends StatelessWidget {
   }
 
   Widget _buildFinancialTab(BuildContext context, bool isManager) {
+    if (isManager) {
+      return ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            color: Colors.red.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const Text('إجمالي الديون الحالية', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.red)),
+                  Text('${farmer.totalDebt} ريال', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red)),
+                  const SizedBox(height: 10),
+                  ElevatedButton.icon(onPressed: () { PdfFarmerReportService.generateAndPrintFarmerReport(farmer: farmer); }, icon: const Icon(Icons.picture_as_pdf), label: const Text('تصدير وطباعة الكشف (PDF)')),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text('سجل العمليات المالية:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.arrow_upward, color: Colors.red),
+              title: const Text('سحب رواكب (دين)'),
+              subtitle: const Text('2026-04-17
+تم أخذ 50 راكبة'),
+              trailing: const Text('- 5000 ريال', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
+      );
+    }
     if (!isManager) {
       return const Center(child: Text('البيانات المالية متاحة للمدير فقط.', style: TextStyle(color: Colors.grey, fontSize: 18)));
     }
